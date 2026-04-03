@@ -10,13 +10,12 @@
 #                                  `-._,_)' // / ``--...____..-'              #
 #                                                                             #
 # *************************************************************************** #
-#  File: __main__.py                                                          #
+#  File: __init__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
-#  Created: 2026/04/03 09:37:06 by rruiz                                      #
-#  Updated: 2026/04/03 11:19:19 by rruiz                                      #
+#  Created: 2026/04/03 10:37:35 by rruiz                                      #
+#  Updated: 2026/04/03 11:19:38 by rruiz                                      #
 # *************************************************************************** #
 
-from sys import argv
+from src.models import ZoneType, Color
 
-def main():
-    print(type(argv))
+all = [ZoneType, Color]

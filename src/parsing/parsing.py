@@ -10,13 +10,11 @@
 #                                  `-._,_)' // / ``--...____..-'              #
 #                                                                             #
 # *************************************************************************** #
-#  File: __main__.py                                                          #
+#  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
-#  Created: 2026/04/03 09:37:06 by rruiz                                      #
-#  Updated: 2026/04/03 11:19:19 by rruiz                                      #
+#  Created: 2026/04/03 11:11:38 by rruiz                                      #
+#  Updated: 2026/04/03 11:11:52 by rruiz                                      #
 # *************************************************************************** #
 
-from sys import argv
-
-def main():
-    print(type(argv))
+class Parser():
+    pass
