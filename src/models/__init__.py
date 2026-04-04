@@ -13,9 +13,5 @@
 #  File: __init__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:17:21 by rruiz                                      #
-#  Updated: 2026/04/03 11:20:48 by rruiz                                      #
+#  Updated: 2026/04/03 11:34:58 by rruiz                                      #
 # *************************************************************************** #
-
-from ..models.enum import ZoneType, Color
-
-all = [ZoneType, Color]

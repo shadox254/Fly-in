@@ -10,13 +10,11 @@
 #                                  `-._,_)' // / ``--...____..-'              #
 #                                                                             #
 # *************************************************************************** #
-#  File: __init__.py                                                          #
+#  File: errors.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
-#  Created: 2026/04/03 10:37:35 by rruiz                                      #
-#  Updated: 2026/04/03 11:35:22 by rruiz                                      #
+#  Created: 2026/04/03 11:29:03 by rruiz                                      #
+#  Updated: 2026/04/03 11:30:14 by rruiz                                      #
 # *************************************************************************** #
 
-from src.models.enum import ZoneType, Color
-from src.models.errors import ArgError
-
-all = [ZoneType, Color]
+class ArgError(Exception):
+    pass

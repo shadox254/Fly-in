@@ -13,13 +13,14 @@
 #  File: Makefile                                                             #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/02 17:49:51 by rruiz                                      #
-#  Updated: 2026/04/03 09:06:55 by rruiz                                      #
+#  Updated: 2026/04/04 09:26:05 by rruiz                                      #
 # *************************************************************************** #
 
 MYPY_FLAGS	= --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs --follow-imports=skip
 SRC			= src
 UV_INSTALL	= curl -LsSf https://astral.sh/uv/install.sh | sh
 UV_VERSION	= uv --version
+MAP			=
 
 install:
 	@if ! $(UV_VERSION) > /dev/null 2>&1; then\
@@ -28,7 +29,7 @@ install:
 	@uv sync
 
 run:
-	uv run python -m $(SRC)
+	@uv run python -m $(SRC) --file $(MAP)
 
 debug:
 	uv run -m pdb src

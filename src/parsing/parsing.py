@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/04/03 11:11:52 by rruiz                                      #
+#  Updated: 2026/04/04 09:05:24 by rruiz                                      #
 # *************************************************************************** #
 
 class Parser():
