@@ -10,3 +10,5 @@ hf_cache/
 
 # Virtual environments
 .venv
+
+test.py

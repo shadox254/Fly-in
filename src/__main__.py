@@ -13,36 +13,26 @@
 #  File: __main__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:37:06 by rruiz                                      #
-#  Updated: 2026/04/04 09:25:55 by rruiz                                      #
+#  Updated: 2026/04/11 09:54:38 by rruiz                                      #
 # *************************************************************************** #
 
-from argparse import ArgumentParser
-
 from sys import argv as av
-from src import ArgError
+from src.models.errors import ArgError, MapFileError
+from src.parsing.parsing import Parser
 
 def main():
     try:
         ac = len(av)
         if ac > 3:
-            raise ArgError("Error, too many arguments.")
+            raise ArgError('Error, too many arguments.')
 
-        arg = ArgumentParser()
-        arg.add_argument(
-            "--file", "-f",
-            help="Path to the file containing the map",
-            default="maps/easy/01_linear_path.txt",
-            type=str
-        )
-        arg = arg.parse_args()
+        fly_in = Parser(av[2])
 
-        with open(arg.file, "r"):
-            pass
 
-    except FileNotFoundError as e:
-        print(f"Error, map not found: {e.filename}")
+    except (MapFileError, TypeError) as e:
+        print(e)
     except Exception as e:
-        print(f"Unexpected error, {e}")
+        print(f'Unexpected error, "{e}"')
 
 if __name__ == "__main__":
     main()

@@ -13,10 +13,5 @@
 #  File: __init__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 10:37:35 by rruiz                                      #
-#  Updated: 2026/04/03 11:35:22 by rruiz                                      #
+#  Updated: 2026/04/11 09:30:17 by rruiz                                      #
 # *************************************************************************** #
-
-from src.models.enum import ZoneType, Color
-from src.models.errors import ArgError
-
-all = [ZoneType, Color]
