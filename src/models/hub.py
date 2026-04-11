@@ -13,13 +13,13 @@
 #  File: hub.py                                                               #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:41:53 by rruiz                                      #
-#  Updated: 2026/04/11 15:30:32 by rruiz                                      #
+#  Updated: 2026/04/11 16:14:16 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.enum import ZoneType, Color
 
 class Hub():
-    def __init__(self, name: str, x: int, y: int, connections: list[Hub], type: str = ZoneType.NORMAL, color: str = Color.LIGHT_GRAY, max_drones: str = 1):
+    def __init__(self, name: str, x: int, y: int, connections: dict[str, int], type: str = ZoneType.NORMAL, color: str = Color.LIGHT_GRAY, max_drones: str = 1):
         self.name = name
         zonetype_list = [s.value for s in ZoneType]
         if type not in zonetype_list:

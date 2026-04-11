@@ -13,7 +13,7 @@
 #  File: errors.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:29:03 by rruiz                                      #
-#  Updated: 2026/04/11 14:53:06 by rruiz                                      #
+#  Updated: 2026/04/11 17:36:29 by rruiz                                      #
 # *************************************************************************** #
 
 class ArgError(Exception):

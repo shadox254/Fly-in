@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/04/11 15:39:40 by rruiz                                      #
+#  Updated: 2026/04/11 17:35:14 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -22,10 +22,11 @@ from src.models.errors import StartHubError, EndHubError
 
 class FlyinManager():
     def __init__(self, drone_nbr: int):
-        self.hub_list: list[Hub] = []
+        self.hubs = {}
         self.drone_nbr = drone_nbr
         self.has_start = 0
         self.has_end = 0
+        self.connections = {}
 
     def add_hub(self, informations_line: str):
         parts = informations_line.split('[')
@@ -70,22 +71,21 @@ class FlyinManager():
                     case _:
                         raise TypeError(f'Error, invalid metadata "{curr_value[0]}"')
 
-        self.hub_list.append(Hub(name, x, y, [], zone, color, max_drones))
+        self.hubs[name] = Hub(name, x, y, [], zone, color, max_drones)
 
 
     def add_connection(self, connection_line: str):
         parts = connection_line.split('[')
-        core_info = parts[0].replace('connection:', '').strip()
-        hub_names = core_info.split('-')
+        infos = parts[0].replace('connection:', '').strip()
+        hub_names = infos.split('-')
 
         if len(hub_names) != 2:
             return
 
-        name1, name2 = hub_names[0].strip(), hub_names[1].strip()
-
-        # Recherche des objets Hub
-        hub1 = next((h for h in self.hub_list if h.name == name1), None)
-        hub2 = next((h for h in self.hub_list if h.name == name2), None)
+        hub1_name = hub_names[0].strip()
+        hub2_name = hub_names[1].strip()
+        hub1 = self.hubs[hub1_name]
+        hub2 = self.hubs[hub2_name]
 
         if not hub1 or not hub2:
             return
@@ -97,5 +97,5 @@ class FlyinManager():
                 if 'max_link_capacity=' in tag:
                     capacity = int(tag.split('=')[1])
 
-        hub1.connections[name2] = capacity
-        hub2.connections[name1] = capacity
+        self.connections.setdefault(hub1_name, {})[hub2_name] = capacity
+        self.connections.setdefault(hub2_name, {})[hub1_name]= capacity
