@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/04/11 15:30:41 by rruiz                                      #
+#  Updated: 2026/04/11 15:39:40 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -73,5 +73,29 @@ class FlyinManager():
         self.hub_list.append(Hub(name, x, y, [], zone, color, max_drones))
 
 
-    def add_connection(self, informations_line: str):
-        pass
+    def add_connection(self, connection_line: str):
+        parts = connection_line.split('[')
+        core_info = parts[0].replace('connection:', '').strip()
+        hub_names = core_info.split('-')
+
+        if len(hub_names) != 2:
+            return
+
+        name1, name2 = hub_names[0].strip(), hub_names[1].strip()
+
+        # Recherche des objets Hub
+        hub1 = next((h for h in self.hub_list if h.name == name1), None)
+        hub2 = next((h for h in self.hub_list if h.name == name2), None)
+
+        if not hub1 or not hub2:
+            return
+
+        capacity = 1
+        if len(parts) > 1:
+            metadata = parts[1].replace(']', '').strip()
+            for tag in metadata.split():
+                if 'max_link_capacity=' in tag:
+                    capacity = int(tag.split('=')[1])
+
+        hub1.connections[name2] = capacity
+        hub2.connections[name1] = capacity
