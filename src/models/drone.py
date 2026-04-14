@@ -10,25 +10,18 @@
 #                                  `-._,_)' // / ``--...____..-'              #
 #                                                                             #
 # *************************************************************************** #
-#  File: hub.py                                                               #
+#  File: drone.py                                                             #
 #  By: rruiz <rruiz@student.42.fr>                                            #
-#  Created: 2026/04/04 10:41:53 by rruiz                                      #
-#  Updated: 2026/04/14 17:29:21 by rruiz                                      #
+#  Created: 2026/04/13 08:58:51 by rruiz                                      #
+#  Updated: 2026/04/14 17:33:01 by rruiz                                      #
 # *************************************************************************** #
 
-from src.models.enum import ZoneType, Color
+from src.models.hub import Hub
 
-class Hub():
-    def __init__(self, name: str, x: int, y: int, connections: dict[str, int], type: str = ZoneType.NORMAL, color: str = Color.LIGHT_GRAY, max_drones: str = 1):
-        self.name = name
-        zonetype_list = [s.value for s in ZoneType]
-        if type not in zonetype_list:
-            zonetype_str = ', '.join(map(str, zonetype_list[:-1])) + ' or ' + zonetype_list[-1]
-            raise TypeError(f'Error, invalid zone type: {type}, type must be {zonetype_str}')
-
-        self.x = x
-        self.y = y
-        self.zone_type = type
-        self.color = color
-        self.max_drones = max_drones
-        self.connections = connections
+class Drone():
+    def __init__(self, id: int, start_zone: Hub):
+        self.name = "D" + str(id)
+        self.current_zone = start_zone
+        self.path = list[Hub]
+        self.in_simu = True
+        self.has_finish = False

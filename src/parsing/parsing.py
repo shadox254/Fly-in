@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/04/11 15:30:43 by rruiz                                      #
+#  Updated: 2026/04/14 17:55:43 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
@@ -25,7 +25,7 @@ class Parser():
         self.manager = None
 
         self._file_is_valid()
-        self.read_lines()
+        self._read_lines()
 
     def _file_is_valid(self):
         try:
@@ -42,7 +42,7 @@ class Parser():
         except NotADirectoryError:
             raise MapFileError(f'Error, path to the file is incorrect: "{file}"')
 
-    def read_lines(self):
+    def _read_lines(self) -> FlyinManager:
         try:
             with open(self.map, 'r') as f:
                 for line in f:
@@ -58,3 +58,7 @@ class Parser():
                         raise MapInfosError(f'Error, map line invalid: "{line}"')
         except ValueError:
             raise MapInfosError('Error, invalid nb_drones in map')
+        if self.manager.has_start != 1 or self.manager.has_end != 1:
+            print(self.manager.has_start, self.manager.has_end)
+            raise MapInfosError('Error, invalid number of start_hub or end_hub')
+        return self.manager
