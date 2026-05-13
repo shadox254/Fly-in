@@ -12,3 +12,4 @@ hf_cache/
 .venv
 
 test.py
+test.txt

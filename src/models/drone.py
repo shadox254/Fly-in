@@ -13,7 +13,7 @@
 #  File: drone.py                                                             #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/13 08:58:51 by rruiz                                      #
-#  Updated: 2026/04/14 17:33:01 by rruiz                                      #
+#  Updated: 2026/05/13 09:35:46 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -22,6 +22,6 @@ class Drone():
     def __init__(self, id: int, start_zone: Hub):
         self.name = "D" + str(id)
         self.current_zone = start_zone
-        self.path = list[Hub]
+        self.path: list[Hub] = []
         self.in_simu = True
         self.has_finish = False

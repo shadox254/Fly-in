@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/04/14 17:55:43 by rruiz                                      #
+#  Updated: 2026/05/13 09:50:14 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
@@ -40,7 +40,8 @@ class Parser():
         except IsADirectoryError:
             raise MapFileError(f'Error, "{file}" is a directory')
         except NotADirectoryError:
-            raise MapFileError(f'Error, path to the file is incorrect: "{file}"')
+            raise MapFileError(f'Error, path to the file is incorrect: '
+                               f'"{file}"')
 
     def _read_lines(self) -> FlyinManager:
         try:
@@ -53,12 +54,20 @@ class Parser():
                     elif line.startswith(('start_hub', 'hub', 'end_hub')):
                         self.manager.add_hub(line)
                     elif line.startswith('connection'):
+                        if self.manager is None:
+                            raise MapInfosError('Error, manager not '
+                                                'initialized')
                         self.manager.add_connection(line)
                     else:
-                        raise MapInfosError(f'Error, map line invalid: "{line}"')
+                        raise MapInfosError(f'Error, map line invalid: '
+                                            f'"{line}"')
         except ValueError:
             raise MapInfosError('Error, invalid nb_drones in map')
+        if self.manager is None:
+            raise MapInfosError('Error, empty map')
         if self.manager.has_start != 1 or self.manager.has_end != 1:
-            print(self.manager.has_start, self.manager.has_end)
-            raise MapInfosError('Error, invalid number of start_hub or end_hub')
+            raise MapInfosError('Error, invalid number of start_hub or '
+                                f'end_hub')
+
+        self.manager.create_drones()
         return self.manager

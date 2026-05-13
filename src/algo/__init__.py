@@ -10,23 +10,8 @@
 #                                  `-._,_)' // / ``--...____..-'              #
 #                                                                             #
 # *************************************************************************** #
-#  File: errors.py                                                            #
+#  File: __init__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
-#  Created: 2026/04/03 11:29:03 by rruiz                                      #
-#  Updated: 2026/05/13 09:46:28 by rruiz                                      #
+#  Created: 2026/05/13 09:35:17 by rruiz                                      #
+#  Updated: 2026/05/13 09:35:18 by rruiz                                      #
 # *************************************************************************** #
-
-class ArgError(Exception):
-    pass
-
-class MapFileError(Exception):
-    pass
-
-class MapInfosError(Exception):
-    pass
-
-class StartHubError(Exception):
-    pass
-
-class EndHubError(Exception):
-    pass

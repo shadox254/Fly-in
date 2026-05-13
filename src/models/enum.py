@@ -13,7 +13,7 @@
 #  File: enum.py                                                              #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:36:55 by rruiz                                      #
-#  Updated: 2026/04/11 17:57:09 by rruiz                                      #
+#  Updated: 2026/05/13 09:46:26 by rruiz                                      #
 # *************************************************************************** #
 
 from enum import Enum
@@ -41,25 +41,36 @@ class Color(Enum):
     Attributes:
         BLACK (str): Black color.
         BLUE (str): Blue color.
-        BOLD (str): Applies bold formatting to the text.
         BROWN (str): Brown color.
+        CRIMSON (str): Crimson color.
         CYAN (str): Cyan color.
-        DARK_GRAY (str): Dark gray color.
-        END (str): Resets all text formatting and colors to terminal defaults.
-        FAINT (str): Decreases text intensity.
+        DARKGRAY (str): Dark gray color.
+        DARKRED (str): Dark red color.
+        GOLD (str): Gold color.
         GREEN (str): Green color.
-        ITALIC (str): Text in italics.
-        LIGHT_BLUE (str): Light blue color.
-        LIGHT_CYAN (str): Light cyan color.
-        LIGHT_GRAY (str): Light gray color.
-        LIGHT_GREEN (str): Light green color.
-        LIGHT_PURPLE (str): Light purple color.
-        LIGHT_RED (str): Light red color.
-        LIGHT_WHITE (str): Light white color.
-        PURPLE (str): Purple color.
+        LIGHTRED (str): Light red color.
+        LIGHTBLUE (str): Light blue color.
+        LIGHTCYAN (str): Light cyan color.
+        LIGHTGRAY (str): Light gray color.
+        LIGHTGREEN (str): Light green color.
+        LIGHTPURPLE (str): Light purple color.
+        LIGHTWHITE (str): Light white color.
+        LIME (str): Lime color.
+        MAGENTA (str): Magenta color.
+        MAROON (str): Maroon color.
+        ORANGE (str): Orange color.
+        PURPLE (str):  Purple color.
+        RAINBOW (str): Hmm...
         RED (str): Red color.
-        UNDERLINE (str): Horizontal line over the text.
+        VIOLET (str): Violet color.
         YELLOW (str): Yellow color.
+
+        BOLD (str): Applies bold formatting to the text.
+        FAINT (str): Decreases text intensity.
+        ITALIC (str): Text in italics.
+        UNDERLINE (str): Horizontal line over the text.
+        RESET (str): Resets all text formatting and colors to terminal
+            defaults.
     """
     BLACK = '\033[0;30m'
     RED = '\033[0;31m'
@@ -68,17 +79,26 @@ class Color(Enum):
     BLUE = '\033[0;34m'
     PURPLE = '\033[0;35m'
     CYAN = '\033[0;36m'
-    LIGHT_GRAY = '\033[0;37m'
-    DARK_GRAY = '\033[1;30m'
-    LIGHT_RED = '\033[1;31m'
-    LIGHT_GREEN = '\033[1;32m'
+    LIGHTGRAY = '\033[0;37m'
+    DARKGRAY = '\033[1;30m'
+    LIGHTRED = '\033[1;31m'
+    LIGHTGREEN = '\033[1;32m'
     YELLOW = '\033[1;33m'
-    LIGHT_BLUE = '\033[1;34m'
-    LIGHT_PURPLE = '\033[1;35m'
-    LIGHT_CYAN = '\033[1;36m'
-    LIGHT_WHITE = '\033[1;37m'
+    LIGHTBLUE = '\033[1;34m'
+    LIGHTPURPLE = '\033[1;35m'
+    LIGHTCYAN = '\033[1;36m'
+    LIGHTWHITE = '\033[1;37m'
+    ORANGE = '\033[38;5;214m'
+    MAROON = '\033[38;5;52m'
+    GOLD = '\033[38;5;220m'
+    DARKRED = '\033[38;5;88m'
+    VIOLET = '\033[38;5;177m'
+    CRIMSON = '\033[38;5;161m'
+    LIME = '\033[38;5;118m'
+    MAGENTA = '\033[38;5;201m'
+    RAINBOW = '\033[0m' # don't know how to do...
     BOLD = '\033[1m'
     FAINT = '\033[2m'
     ITALIC = '\033[3m'
     UNDERLINE = '\033[4m'
-    END = '\033[0m'
+    RESET = '\033[0m'
