@@ -13,9 +13,10 @@
 #  File: engine.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:57 by rruiz                                      #
-#  Updated: 2026/05/14 14:29:13 by rruiz                                      #
+#  Updated: 2026/05/14 16:53:03 by rruiz                                      #
 # *************************************************************************** #
 
+from xtermcolor import colorize
 from src.models.calendar import ReservationCalendar
 from src.algo.pathfinding import calculate_drone_path
 from src.models.enum import Color
@@ -95,15 +96,15 @@ class Engine:
                         conn_name = self._get_original_connection_name(current_state[0], current_state[1])
                         parts = conn_name.split('-')
                         colored_parts = []
-                        
+
                         for part in parts:
                             hub_color_str = self.manager.hubs[part].color
                             try:
                                 color_code = Color[hub_color_str.upper()].value
                             except KeyError:
                                 color_code = Color.LIGHTGRAY.value
-                            colored_parts.append(f"{color_code}{part}{Color.RESET.value}")
-                            
+                            colored_parts.append(colorize(part, ansi=color_code))
+
                         colored_conn = "-".join(colored_parts)
                         turn_output.append(f"{drone.name}-{colored_conn}")
                     else:
@@ -112,7 +113,9 @@ class Engine:
                             color_code = Color[hub_color_str.upper()].value
                         except KeyError:
                             color_code = Color.LIGHTGRAY.value
-                        turn_output.append(f"{drone.name}-{color_code}{current_state}{Color.RESET.value}")
+                        
+                        colored_hub = colorize(str(current_state), ansi=color_code)
+                        turn_output.append(f"{drone.name}-{colored_hub}")
 
             if turn_output:
                 print(" ".join(turn_output))

@@ -13,7 +13,7 @@
 #  File: enum.py                                                              #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:36:55 by rruiz                                      #
-#  Updated: 2026/05/13 09:46:26 by rruiz                                      #
+#  Updated: 2026/05/14 16:46:00 by rruiz                                      #
 # *************************************************************************** #
 
 from enum import Enum
@@ -64,41 +64,55 @@ class Color(Enum):
         RED (str): Red color.
         VIOLET (str): Violet color.
         YELLOW (str): Yellow color.
-
-        BOLD (str): Applies bold formatting to the text.
-        FAINT (str): Decreases text intensity.
-        ITALIC (str): Text in italics.
-        UNDERLINE (str): Horizontal line over the text.
         RESET (str): Resets all text formatting and colors to terminal
             defaults.
     """
-    BLACK = '\033[0;30m'
-    RED = '\033[0;31m'
-    GREEN = '\033[0;32m'
-    BROWN = '\033[0;33m'
-    BLUE = '\033[0;34m'
-    PURPLE = '\033[0;35m'
-    CYAN = '\033[0;36m'
-    LIGHTGRAY = '\033[0;37m'
-    DARKGRAY = '\033[1;30m'
-    LIGHTRED = '\033[1;31m'
-    LIGHTGREEN = '\033[1;32m'
-    YELLOW = '\033[1;33m'
-    LIGHTBLUE = '\033[1;34m'
-    LIGHTPURPLE = '\033[1;35m'
-    LIGHTCYAN = '\033[1;36m'
-    LIGHTWHITE = '\033[1;37m'
-    ORANGE = '\033[38;5;214m'
-    MAROON = '\033[38;5;52m'
-    GOLD = '\033[38;5;220m'
-    DARKRED = '\033[38;5;88m'
-    VIOLET = '\033[38;5;177m'
-    CRIMSON = '\033[38;5;161m'
-    LIME = '\033[38;5;118m'
-    MAGENTA = '\033[38;5;201m'
-    RAINBOW = '\033[0m' # don't know how to do...
-    BOLD = '\033[1m'
-    FAINT = '\033[2m'
-    ITALIC = '\033[3m'
-    UNDERLINE = '\033[4m'
-    RESET = '\033[0m'
+    # BLACK = '\033[0;30m'
+    # RED = '\033[0;31m'
+    # GREEN = '\033[0;32m'
+    # BROWN = '\033[0;33m'
+    # BLUE = '\033[0;34m'
+    # PURPLE = '\033[0;35m'
+    # CYAN = '\033[0;36m'
+    # LIGHTGRAY = '\033[0;37m'
+    # DARKGRAY = '\033[1;30m'
+    # LIGHTRED = '\033[1;31m'
+    # LIGHTGREEN = '\033[1;32m'
+    # YELLOW = '\033[1;33m'
+    # LIGHTBLUE = '\033[1;34m'
+    # LIGHTPURPLE = '\033[1;35m'
+    # LIGHTCYAN = '\033[1;36m'
+    # ORANGE = '\033[38;5;214m'
+    # GOLD = '\033[38;5;220m'
+    # DARKRED = '\033[38;5;88m'
+    # VIOLET = '\033[38;5;177m'
+    # CRIMSON = '\033[38;5;161m'
+    # LIME = '\033[38;5;118m'
+    # MAGENTA = '\033[38;5;201m'
+    # RAINBOW = '\033[0m' # don't know how to do...
+    # RESET = '\033[0m'
+    BLACK = 0
+    RED = 1
+    GREEN = 2
+    BROWN = 3
+    BLUE = 4
+    PURPLE = 5
+    CYAN = 6
+    LIGHTGRAY = 250
+    DARKGRAY = 240
+    LIGHTRED = 203
+    LIGHTGREEN = 113
+    YELLOW = 11
+    LIGHTBLUE = 117
+    LIGHTPURPLE = 98
+    LIGHTCYAN = 123
+    ORANGE = 202
+    GOLD = 214
+    DARKRED = 88
+    VIOLET = 165
+    CRIMSON = 160
+    LIME = 118
+    MAGENTA = 162
+    MAROON = 196
+    RAINBOW = 255 # don't know how to do...
+    RESET = 255
