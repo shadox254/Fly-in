@@ -13,7 +13,7 @@
 #  File: __main__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:37:06 by rruiz                                      #
-#  Updated: 2026/05/13 09:47:05 by rruiz                                      #
+#  Updated: 2026/05/14 15:00:32 by rruiz                                      #
 # *************************************************************************** #
 
 from sys import argv as av

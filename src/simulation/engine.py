@@ -13,7 +13,7 @@
 #  File: engine.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:57 by rruiz                                      #
-#  Updated: 2026/05/13 09:36:54 by rruiz                                      #
+#  Updated: 2026/05/14 14:29:13 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.calendar import ReservationCalendar
@@ -45,9 +45,8 @@ class Engine:
 
                     if i > 0:
                         prev_turn, prev_hub = path[i - 1]
-                        if turn - prev_turn > 1:
-                            for t in range(prev_turn + 1, turn):
-                                self.calendar.reserve_connection(prev_hub, hub, t)
+                        for t in range(prev_turn + 1, turn + 1):
+                            self.calendar.reserve_connection(prev_hub, hub, t)
 
     def _get_original_connection_name(self, hub1, hub2):
         search_key = f"{hub1}-{hub2}"
@@ -81,7 +80,7 @@ class Engine:
                 max_turn = max(max_turn, path[-1][0])
 
         for current_turn in range(1, max_turn + 1):
-            turn_output = [f"Turn {current_turn}:"]
+            turn_output = []
 
             for drone in self.manager.drone_list:
                 path = self.paths.get(drone.name)

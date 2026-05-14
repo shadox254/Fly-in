@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/13 09:50:34 by rruiz                                      #
+#  Updated: 2026/05/14 14:59:44 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -36,15 +36,16 @@ class FlyinManager():
     def add_hub(self, informations_line: str):
         parts = informations_line.split('[')
         infos = parts[0].split()
+        hub_type = infos[0]
 
-        if infos[0] == 'start_hub:':
+        if hub_type == 'start_hub:':
             if not self.has_start:
                 self.has_start = 1
                 self.start_hub_name = infos[1]
             else:
                 raise StartHubError('Error, too many start_hub in map')
 
-        if infos[0] == 'end_hub:':
+        if hub_type == 'end_hub:':
             if not self.has_end:
                 self.has_end += 1
                 self.end_hub_name = infos[1]
@@ -57,7 +58,11 @@ class FlyinManager():
 
         zone = ZoneType.NORMAL.value
         color = Color.LIGHTGRAY
-        max_drones = 1
+
+        if hub_type in ('start_hub:', 'end_hub:'):
+            max_drones = self.drone_nbr
+        else:
+            max_drones = 1
 
         if len(parts) > 1:
             metadata_str = parts[1].replace(']', '').strip()
@@ -74,7 +79,8 @@ class FlyinManager():
                     case 'color':
                         color = curr_value[1]
                     case 'max_drones':
-                        max_drones = int(curr_value[1])
+                        if hub_type not in ('start_hub:', 'end_hub:'):
+                            max_drones = int(curr_value[1])
                     case _:
                         raise TypeError('Error, invalid metadata "'
                                         f'{curr_value[0]}"')

@@ -13,7 +13,7 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/13 09:35:36 by rruiz                                      #
+#  Updated: 2026/05/14 14:59:11 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
@@ -45,12 +45,20 @@ def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar, hub
                 if n_type == 'blocked':
                     continue
                     
-                move_cost = 2 if n_type == 'restricted' else 1
+                if n_type == 'restricted':
+                    move_cost = 2
+                else:
+                    move_cost = 1
                 arrival_turn = current_turn + move_cost
 
-                if move_cost == 2:
-                    if not calendar.is_connection_available(current_hub, neighbor, current_turn + 1, cap):
-                        continue
+                conn_available = True
+                for t in range(current_turn + 1, arrival_turn + 1):
+                    if not calendar.is_connection_available(current_hub, neighbor, t, cap):
+                        conn_available = False
+                        break
+                
+                if not conn_available:
+                    continue
 
                 n_max_d = hubs[neighbor].max_drones
                 if calendar.is_hub_available(neighbor, arrival_turn, n_max_d):
