@@ -13,10 +13,10 @@
 #  File: hub.py                                                               #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:41:53 by rruiz                                      #
-#  Updated: 2026/05/15 11:21:09 by rruiz                                      #
+#  Updated: 2026/05/15 12:40:31 by rruiz                                      #
 # *************************************************************************** #
 
-from src.models.enum import ZoneType, Color
+from src.models.enum import ZoneType
 
 
 class Hub():
@@ -26,15 +26,15 @@ class Hub():
         name (str): Unique identifier of the hub.
         x (int): Horizontal coordinate on the grid.
         y (int): Vertical coordinate on the grid.
-        zone_type (str): Type of hub.
-        color (str): Name color for visual representation.
+        zone_type (ZoneType): Type of hub.
+        color (Color): Name color for visual representation.
         max_drones (int): Capacity limit for simultaneous drones on this hub.
         connections (dict[str, int]): Map of reachable hub names and their
             travel costs.
     '''
     def __init__(self, name: str, x: int, y: int, connections: dict[str, int],
-                 type: str = ZoneType.NORMAL, color: str = Color.LIGHTGRAY,
-                 max_drones: str = 1):
+                 type: str = 'normal', color: str = 'lightgray',
+                 max_drones: int = 1):
         '''Initialize a new Hub instance.
 
         Args:

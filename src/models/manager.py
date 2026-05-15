@@ -13,13 +13,14 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/15 11:22:27 by rruiz                                      #
+#  Updated: 2026/05/15 16:28:47 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
 from src.models.drone import Drone
-from src.models.enum import ZoneType, Color
-from src.models.errors import StartHubError, EndHubError
+from src.models.enum import ZoneType
+from src.models.errors import StartHubError, EndHubError, ConnectionError
+from src.models.errors import MapFileError
 
 
 class FlyinManager():
@@ -41,26 +42,29 @@ class FlyinManager():
                 capacity link.
         connection_names (dict[str, str]): Normalization map for links.
             Maps both 'A-B' and 'B-A' to a single connection string.
-        drone_list (list): List of all existing drones.
+        drone_list (list[Drone]): List of all existing drones.
+        seen_connections (set[frozenset[str]]): Set of unique hub pairs to
+            prevent duplicate connections regardless of order.
     '''
-    def __init__(self, drone_nbr: int):
+    def __init__(self, drone_nbr: int) -> None:
         '''Initialize the manager with a specific number of drones.
 
         Args:
             drone_nbr (int): The total number of drones to manage in the
                 simulation.
         '''
-        self.hubs = {}
+        self.hubs: dict[str, Hub] = {}
         self.drone_nbr = drone_nbr
         self.has_start = 0
         self.has_end = 0
         self.start_hub_name = ""
         self.end_hub_name = ""
-        self.connections = {}
-        self.connection_names = {}
-        self.drone_list = []
+        self.connections: dict[str, dict[str, int]] = {}
+        self.connection_names: dict[str, str] = {}
+        self.drone_list: list[Drone] = []
+        self.seen_connections: set[frozenset[str]] = set()
 
-    def add_hub(self, informations_line: str):
+    def add_hub(self, informations_line: str) -> None:
         '''Parse a configuration line to create and store a new Hub.
 
         This method handles start, end, and normal hubs, parsing their
@@ -76,9 +80,15 @@ class FlyinManager():
             TypeError: If an unknown metadata tag is encountered.
         '''
         parts = informations_line.split('[')
-        infos = parts[0].split()
-        hub_type = infos[0]
+        if len(parts) > 2:
+            raise MapFileError('Error, invalid syntax on the line: '
+                               f'{informations_line}')
 
+        infos = parts[0].split()
+        if len(infos) != 4:
+            raise MapFileError('Error, invalid number of arguments')
+
+        hub_type = infos[0]
         if hub_type == 'start_hub:':
             if not self.has_start:
                 self.has_start = 1
@@ -93,17 +103,23 @@ class FlyinManager():
             else:
                 raise EndHubError('Error, too many end_hub in map')
 
-        name = infos[1]
-        x = int(infos[2])
-        y = int(infos[3])
+        name = ""
+        try:
+            name = infos[1]
+        except MapFileError:
+            raise MapFileError('Error, missing name of hub')
+        try:
+            x = int(infos[2])
+        except IndexError:
+            raise MapFileError(f'Error, x coordinate of {name} is missing')
+        try:
+            y = int(infos[3])
+        except IndexError:
+            raise MapFileError(f'Error, y coordinate of {name} is missing')
 
         zone = ZoneType.NORMAL.value
-        color = Color.LIGHTGRAY
-
-        if hub_type in ('start_hub:', 'end_hub:'):
-            max_drones = self.drone_nbr
-        else:
-            max_drones = 1
+        color = 'lightgray'
+        max_drones = 1
 
         if len(parts) > 1:
             metadata_str = parts[1].replace(']', '').strip()
@@ -120,15 +136,27 @@ class FlyinManager():
                     case 'color':
                         color = curr_value[1]
                     case 'max_drones':
+                        val = int(curr_value[1])
                         if hub_type not in ('start_hub:', 'end_hub:'):
-                            max_drones = int(curr_value[1])
+                            if val <= 0:
+                                raise ValueError('Error, max_drones must be '
+                                                 'greater than 0')
+                            max_drones = val
+
+                        elif hub_type in ('start_hub:', 'end_hub:'):
+                            if val < self.drone_nbr:
+                                raise ValueError("Error, start or end hub "
+                                                 "doesn't have enough space "
+                                                 "for all the drones ")
+                            max_drones = val
+
                     case _:
                         raise TypeError('Error, invalid metadata "'
                                         f'{curr_value[0]}"')
 
-        self.hubs[name] = Hub(name, x, y, [], zone, color, max_drones)
+        self.hubs[name] = Hub(name, x, y, {}, zone, color, max_drones)
 
-    def add_connection(self, connection_line: str):
+    def add_connection(self, connection_line: str) -> None:
         '''Parse a connection line to establish a link between two hubs.
             Updates the adjacency map. Connections are bidirectional with
             a defined capacity.
@@ -147,7 +175,18 @@ class FlyinManager():
         hub1_name = hub_names[0].strip()
         hub2_name = hub_names[1].strip()
         hub1 = self.hubs.get(hub1_name)
+        if not hub1:
+            raise MapFileError('Error, connection with an unexistant hub'
+                               f'({hub1_name})')
         hub2 = self.hubs.get(hub2_name)
+        if not hub2:
+            raise MapFileError('Error, connection with an unexistant hub '
+                               f'({hub2_name})')
+
+        connection_pair = frozenset([hub1_name, hub2_name])
+        if connection_pair in self.seen_connections:
+            raise ConnectionError("Error, duplicated connection in map file")
+        self.seen_connections.add(connection_pair)
 
         if not hub1 or not hub2:
             return
@@ -158,6 +197,9 @@ class FlyinManager():
             for tag in metadata.split():
                 if 'max_link_capacity=' in tag:
                     capacity = int(tag.split('=')[1])
+                else:
+                    raise TypeError('Error, invalid metadata "'
+                                    f'{tag}"')
 
         self.connections.setdefault(hub1_name, {})[hub2_name] = capacity
         self.connections.setdefault(hub2_name, {})[hub1_name] = capacity
@@ -166,7 +208,7 @@ class FlyinManager():
         self.connection_names[f"{hub1_name}-{hub2_name}"] = original_name
         self.connection_names[f"{hub2_name}-{hub1_name}"] = original_name
 
-    def create_drones(self):
+    def create_drones(self) -> None:
         '''Instantiate drones based on the drone_nbr and place them on the
             start hub.
 

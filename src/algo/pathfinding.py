@@ -13,14 +13,22 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/15 11:13:55 by rruiz                                      #
+#  Updated: 2026/05/15 15:12:30 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
+from src.models.calendar import ReservationCalendar
+from src.models.hub import Hub
 
 
-def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar,
-                         hubs, connections):
+def calculate_drone_path(
+        start_hub_name: str,
+        end_hub_name: str,
+        start_turn: int,
+        calendar: ReservationCalendar,
+        hubs: dict[str, Hub],
+        connections: dict[str, dict[str, int]]
+        ) -> list[tuple[int, str]] | None:
     '''Find the shortest valid path for a drone using a time-expanded Dijkstra
     algorithm.
 
@@ -43,7 +51,7 @@ def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar,
         list[tuple[int, str]] | None: A list of (turn, hub_name) representing
             the scheduled path if successful, or None if no path is available.
     '''
-    queue = []
+    queue: list[tuple[int, int, str, list[tuple[int, str]]]] = []
     heapq.heappush(queue, (0, start_turn, start_hub_name,
                            [(start_turn, start_hub_name)]))
     visited = set()

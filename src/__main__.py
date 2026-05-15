@@ -13,16 +13,17 @@
 #  File: __main__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:37:06 by rruiz                                      #
-#  Updated: 2026/05/15 11:10:33 by rruiz                                      #
+#  Updated: 2026/05/15 16:09:48 by rruiz                                      #
 # *************************************************************************** #
 
 from sys import argv as av
-from src.models.errors import ArgError, MapFileError
+from src.models.errors import ArgError, MapFileError, MapInfosError
+from src.models.errors import StartHubError, EndHubError, ConnectionError
 from src.parsing.parsing import Parser
 from src.simulation.engine import Engine
 
 
-def main():
+def main() -> None:
     '''Main entry point of the program.
 
     Retrieves command-line arguments to determine the map file to parse.
@@ -43,24 +44,28 @@ def main():
             raise ArgError('Error, bad arguments.')
 
         p = Parser(map_file)
+        if p.manager is None:
+            return
 
         engine = Engine(p.manager)
         engine.calculate_all_paths()
         engine.simulate()
 
-    except (MapFileError, TypeError) as e:
+    except (MapFileError, TypeError, MapInfosError, StartHubError,
+            EndHubError, ConnectionError, IndexError, ValueError) as e:
         print(e)
     except Exception as e:
         tb = e.__traceback__
-        while tb.tb_next:
+        while tb and tb.tb_next:
             tb = tb.tb_next
 
-        file = tb.tb_frame.f_code.co_filename
-        function = tb.tb_frame.f_code.co_name
-        line = tb.tb_lineno
+        if tb:
+            file = tb.tb_frame.f_code.co_filename
+            function = tb.tb_frame.f_code.co_name
+            line = tb.tb_lineno
 
-        print(f'Unexpected error, "{e}"\nin: {file}\nfunction: {function},'
-              f' line: {line}')
+            print(f'Unexpected error, "{e}"\nin: {file}\nfunction: {function},'
+                  f' line: {line}')
 
 
 if __name__ == "__main__":

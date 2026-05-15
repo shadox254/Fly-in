@@ -13,28 +13,29 @@
 #  File: engine.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:57 by rruiz                                      #
-#  Updated: 2026/05/15 11:17:30 by rruiz                                      #
+#  Updated: 2026/05/15 13:08:07 by rruiz                                      #
 # *************************************************************************** #
 
 from xtermcolor import colorize
 from src.models.calendar import ReservationCalendar
 from src.algo.pathfinding import calculate_drone_path
 from src.models.enum import Color
+from src.models.manager import FlyinManager
 
 
 class Engine:
     '''Main engine responsible for calculating drone paths and running
     the simulation.
     '''
-    def __init__(self, manager):
+    def __init__(self, manager: FlyinManager) -> None:
         '''Initializes the engine with the main manager, a blank calendar,
         and a paths registry.
         '''
         self.manager = manager
         self.calendar = ReservationCalendar()
-        self.paths = {}
+        self.paths: dict[str, list[tuple[int, str]] | None] = {}
 
-    def calculate_all_paths(self):
+    def calculate_all_paths(self) -> None:
         '''Sequentially calculates paths for all registered drones and reserves
         their passage (hubs and connections) in the calendar.
         '''
@@ -59,13 +60,17 @@ class Engine:
                         for t in range(prev_turn + 1, turn + 1):
                             self.calendar.reserve_connection(prev_hub, hub, t)
 
-    def _get_original_connection_name(self, hub1, hub2):
+    def _get_original_connection_name(self, hub1: str, hub2: str) -> str:
         '''Retrieves the original name of a connection between two given hubs.
         '''
         search_key = f"{hub1}-{hub2}"
         return self.manager.connection_names.get(search_key, search_key)
 
-    def _get_drone_state(self, path, turn):
+    def _get_drone_state(
+            self,
+            path: list[tuple[int, str]] | None,
+            turn: int
+            ) -> str | tuple[str, str] | None:
         '''Evaluates the exact position of a drone (on a hub or in transit on a
         connection) at a specific turn.
         '''
@@ -89,7 +94,7 @@ class Engine:
 
         return None
 
-    def simulate(self):
+    def simulate(self) -> None:
         '''Runs the turn-by-turn simulation loop, identifies drone state
         changes, and prints their movements formatted with their
         respective colors.

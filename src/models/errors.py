@@ -13,7 +13,7 @@
 #  File: errors.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:29:03 by rruiz                                      #
-#  Updated: 2026/05/15 11:19:51 by rruiz                                      #
+#  Updated: 2026/05/15 16:23:16 by rruiz                                      #
 # *************************************************************************** #
 
 class ArgError(Exception):
@@ -38,4 +38,9 @@ class StartHubError(Exception):
 
 class EndHubError(Exception):
     '''Exception raised for end hub errors.'''
+    pass
+
+
+class ConnectionError(Exception):
+    '''Exception raised for connection errors.'''
     pass

@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/05/15 11:16:52 by rruiz                                      #
+#  Updated: 2026/05/15 16:15:28 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
@@ -41,12 +41,12 @@ class Parser():
             MapInfosError: If the map content is logically invalid.
         '''
         self.map = map
-        self.manager = None
+        self.manager: FlyinManager | None = None
 
         self._file_is_valid()
         self._read_lines()
 
-    def _file_is_valid(self):
+    def _file_is_valid(self) -> None:
         '''Perform low-level filesystem checks on the target map file.
 
         Verifies existence, permissions, and path integrity before reading.
@@ -88,11 +88,15 @@ class Parser():
         try:
             with open(self.map, 'r') as f:
                 for line in f:
-                    if line.startswith('#') or line == '\n':
-                        pass
-                    elif line.startswith('nb_drones'):
+                    line = line.split("#")[0].strip()
+                    if not line:
+                        continue
+                    if line.startswith('nb_drones'):
                         self.manager = FlyinManager(int(line.split(":")[1]))
                     elif line.startswith(('start_hub', 'hub', 'end_hub')):
+                        if self.manager is None:
+                            raise MapInfosError('Error, manager not '
+                                                'initialized')
                         self.manager.add_hub(line)
                     elif line.startswith('connection'):
                         if self.manager is None:
@@ -103,7 +107,7 @@ class Parser():
                         raise MapInfosError(f'Error, map line invalid: '
                                             f'"{line}"')
         except ValueError:
-            raise MapInfosError('Error, invalid nb_drones in map')
+            raise MapInfosError('Error, invalid nb_drones')
         if self.manager is None:
             raise MapInfosError('Error, empty map')
         if self.manager.has_start != 1 or self.manager.has_end != 1:

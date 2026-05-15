@@ -13,7 +13,7 @@
 #  File: calendar.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:30 by rruiz                                      #
-#  Updated: 2026/05/15 11:18:42 by rruiz                                      #
+#  Updated: 2026/05/15 11:37:12 by rruiz                                      #
 # *************************************************************************** #
 
 class ReservationCalendar:
@@ -27,9 +27,9 @@ class ReservationCalendar:
             is a tuple of (turn_number, resource_id) and the value is the
             count of drones currently occupying that resource.
     '''
-    def __init__(self):
+    def __init__(self) -> None:
         '''Initialize an empty reservation calendar.'''
-        self.reservations = {}
+        self.reservations: dict[tuple[int, str], int] = {}
 
     def _get_connection_id(self, hub1_name: str, hub2_name: str) -> str:
         '''Generate a unique, sorted identifier for a link between two hubs.
@@ -62,7 +62,10 @@ class ReservationCalendar:
             otherwise.
         '''
         current_occupancy = self.reservations.get((turn, hub_name), 0)
-        return current_occupancy < max_capacity
+        if current_occupancy < max_capacity:
+            return True
+        else:
+            return False
 
     def is_connection_available(self, hub1: str, hub2: str, turn: int,
                                 max_capacity: int) -> bool:
@@ -80,7 +83,10 @@ class ReservationCalendar:
         '''
         conn_id = self._get_connection_id(hub1, hub2)
         current_occupancy = self.reservations.get((turn, conn_id), 0)
-        return current_occupancy < max_capacity
+        if current_occupancy < max_capacity:
+            return True
+        else:
+            return False
 
     def reserve_hub(self, hub_name: str, turn: int) -> None:
         '''Increment the occupancy count of a hub for a given turn.
