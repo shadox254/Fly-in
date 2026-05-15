@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/15 10:07:11 by rruiz                                      #
+#  Updated: 2026/05/15 10:47:25 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -80,7 +80,7 @@ class FlyinManager():
 
         if hub_type == 'end_hub:':
             if not self.has_end:
-                self.has_end += 1
+                self.has_end = 1
                 self.end_hub_name = infos[1]
             else:
                 raise EndHubError('Error, too many end_hub in map')

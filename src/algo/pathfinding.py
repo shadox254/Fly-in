@@ -13,12 +13,30 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/15 08:48:16 by rruiz                                      #
+#  Updated: 2026/05/15 10:54:20 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
 
 def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar, hubs, connections):
+    '''Find the shortest valid path for a drone using a time-expanded Dijkstra algorithm.
+
+    This function accounts for hub capacities, connection limits, and zone-based 
+    movement costs. It explores states defined by both location and time (turn) 
+    to avoid collisions and respect network constraints.
+
+    Args:
+        start_hub_name (str): The name of the departure hub.
+        end_hub_name (str): The name of the destination hub.
+        start_turn (int): The turn at which the drone begins its journey.
+        calendar (ReservationCalendar): The global registry of resource occupancy.
+        hubs (dict[str, Hub]): Dictionary containing all hub data and capacities.
+        connections (dict[str, dict[str, int]]): Nested adjacency map with link capacities.
+
+    Returns:
+        list[tuple[int, str]] | None: A list of (turn, hub_name) representing 
+            the scheduled path if successful, or None if no path is available.
+    '''
     queue = []
     heapq.heappush(queue, (0, start_turn, start_hub_name, [(start_turn, start_hub_name)]))
     visited = set()
