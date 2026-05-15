@@ -13,32 +13,39 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/15 10:54:20 by rruiz                                      #
+#  Updated: 2026/05/15 11:13:55 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
 
-def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar, hubs, connections):
-    '''Find the shortest valid path for a drone using a time-expanded Dijkstra algorithm.
 
-    This function accounts for hub capacities, connection limits, and zone-based 
-    movement costs. It explores states defined by both location and time (turn) 
-    to avoid collisions and respect network constraints.
+def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar,
+                         hubs, connections):
+    '''Find the shortest valid path for a drone using a time-expanded Dijkstra
+    algorithm.
+
+    This function accounts for hub capacities, connection limits, and
+    zone-based movement costs. It explores states defined by both location and
+    time (turn) to avoid collisions and respect network constraints.
 
     Args:
         start_hub_name (str): The name of the departure hub.
         end_hub_name (str): The name of the destination hub.
         start_turn (int): The turn at which the drone begins its journey.
-        calendar (ReservationCalendar): The global registry of resource occupancy.
-        hubs (dict[str, Hub]): Dictionary containing all hub data and capacities.
-        connections (dict[str, dict[str, int]]): Nested adjacency map with link capacities.
+        calendar (ReservationCalendar): The global registry of resource
+            occupancy.
+        hubs (dict[str, Hub]): Dictionary containing all hub data and
+            capacities.
+        connections (dict[str, dict[str, int]]): Nested adjacency map with
+            link capacities.
 
     Returns:
-        list[tuple[int, str]] | None: A list of (turn, hub_name) representing 
+        list[tuple[int, str]] | None: A list of (turn, hub_name) representing
             the scheduled path if successful, or None if no path is available.
     '''
     queue = []
-    heapq.heappush(queue, (0, start_turn, start_hub_name, [(start_turn, start_hub_name)]))
+    heapq.heappush(queue, (0, start_turn, start_hub_name,
+                           [(start_turn, start_hub_name)]))
     visited = set()
 
     while queue:
@@ -54,15 +61,17 @@ def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar, hub
 
         max_d = hubs[current_hub].max_drones
         if calendar.is_hub_available(current_hub, current_turn + 1, max_d):
-            heapq.heappush(queue, (cost + 1, current_turn + 1, current_hub, path + [(current_turn + 1, current_hub)]))
+            heapq.heappush(queue,
+                           (cost + 1, current_turn + 1, current_hub,
+                            path + [(current_turn + 1, current_hub)]))
 
         if current_hub in connections:
             for neighbor, cap in connections[current_hub].items():
                 n_type = hubs[neighbor].zone_type
-                
+
                 if n_type == 'blocked':
                     continue
-                    
+
                 if n_type == 'restricted':
                     move_cost = 2
                 else:
@@ -71,15 +80,18 @@ def calculate_drone_path(start_hub_name, end_hub_name, start_turn, calendar, hub
 
                 conn_available = True
                 for t in range(current_turn + 1, arrival_turn + 1):
-                    if not calendar.is_connection_available(current_hub, neighbor, t, cap):
+                    if not calendar.is_connection_available(current_hub,
+                                                            neighbor, t, cap):
                         conn_available = False
                         break
-                
+
                 if not conn_available:
                     continue
 
                 n_max_d = hubs[neighbor].max_drones
                 if calendar.is_hub_available(neighbor, arrival_turn, n_max_d):
-                    heapq.heappush(queue, (cost + move_cost, arrival_turn, neighbor, path + [(arrival_turn, neighbor)]))
+                    heapq.heappush(queue,
+                                   (cost + move_cost, arrival_turn, neighbor,
+                                    path + [(arrival_turn, neighbor)]))
 
     return None

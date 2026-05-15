@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/15 10:47:25 by rruiz                                      #
+#  Updated: 2026/05/15 11:22:27 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -21,27 +21,34 @@ from src.models.drone import Drone
 from src.models.enum import ZoneType, Color
 from src.models.errors import StartHubError, EndHubError
 
+
 class FlyinManager():
     '''Representation of the manager.
 
     Args:
-        hubs (dict[str, Hub]): Dictionnary where key are hubs name and value are the Hub with their informations.
+        hubs (dict[str, Hub]): Dictionnary where key are hubs name and value
+            are the Hub with their informations.
         drone_nbr (int): The number of drones.
-        has_start (int): Like a boolean: true if there is a start, false otherwise.
+        has_start (int): Like a boolean: true if there is a start,
+            false otherwise.
         has_end (int): Like a boolean: true if there is a end, false otherwise.
         start_hub_name (str): The name of the starting hub.
         end_hub_name (str): The name of the ending hub
-        connections (dict[str, dict[str, int]]): Adjacency map representing the graph.
+        connections (dict[str, dict[str, int]]): Adjacency map representing
+        the graph.
             - Key (str): Source hub name.
-            - Value (dict): Neighbors where Key is destination and Value is capacity link.
-        connection_names (dict[str, str]): Normalization map for links. Maps both 'A-B' and 'B-A' to a single connection string.
+            - Value (dict): Neighbors where Key is destination and Value is
+                capacity link.
+        connection_names (dict[str, str]): Normalization map for links.
+            Maps both 'A-B' and 'B-A' to a single connection string.
         drone_list (list): List of all existing drones.
     '''
     def __init__(self, drone_nbr: int):
         '''Initialize the manager with a specific number of drones.
 
         Args:
-            drone_nbr (int): The total number of drones to manage in the simulation.
+            drone_nbr (int): The total number of drones to manage in the
+                simulation.
         '''
         self.hubs = {}
         self.drone_nbr = drone_nbr
@@ -56,11 +63,12 @@ class FlyinManager():
     def add_hub(self, informations_line: str):
         '''Parse a configuration line to create and store a new Hub.
 
-        This method handles start, end, and normal hubs, parsing their 
+        This method handles start, end, and normal hubs, parsing their
         coordinates and optional metadata (zone, color, max_drones).
 
         Args:
-            informations_line (str): A raw string containing hub specifications.
+            informations_line (str): A raw string containing hub
+                specifications.
 
         Raises:
             StartHubError: If more than one start hub is defined.
@@ -121,10 +129,13 @@ class FlyinManager():
         self.hubs[name] = Hub(name, x, y, [], zone, color, max_drones)
 
     def add_connection(self, connection_line: str):
-        '''Parse a connection line to establish a link between two hubs. Updates the adjacency map. Connections are bidirectional with a defined capacity.
+        '''Parse a connection line to establish a link between two hubs.
+            Updates the adjacency map. Connections are bidirectional with
+            a defined capacity.
 
         Args:
-            connection_line (str): A raw string containing the connection link (e.g., "connection: H1-H2 [max_link_capacity=2]").
+            connection_line (str): A raw string containing the connection
+                link (e.g., "connection: H1-H2 [max_link_capacity=2]").
         '''
         parts = connection_line.split('[')
         infos = parts[0].replace('connection:', '').strip()
@@ -156,9 +167,11 @@ class FlyinManager():
         self.connection_names[f"{hub2_name}-{hub1_name}"] = original_name
 
     def create_drones(self):
-        '''Instantiate drones based on the drone_nbr and place them on the start hub.
+        '''Instantiate drones based on the drone_nbr and place them on the
+            start hub.
 
-        Populates the drone_list with new Drone objects, each assigned a unique name based on its incremented ID.
+        Populates the drone_list with new Drone objects, each assigned a
+            unique name based on its incremented ID.
         '''
         start_zone = self.hubs[self.start_hub_name]
         for id in range(self.drone_nbr):

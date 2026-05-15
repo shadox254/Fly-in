@@ -13,10 +13,11 @@
 #  File: enum.py                                                              #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:36:55 by rruiz                                      #
-#  Updated: 2026/05/15 10:07:11 by rruiz                                      #
+#  Updated: 2026/05/15 11:19:36 by rruiz                                      #
 # *************************************************************************** #
 
 from enum import Enum
+
 
 class ZoneType(Enum):
     '''All zone types available.
@@ -34,6 +35,7 @@ class ZoneType(Enum):
     BLOCKED = 'blocked'
     RESTRICTED = 'restricted'
     PRIORITY = 'priority'
+
 
 class Color(Enum):
     '''Available ANSI escape sequences for terminal text formatting.
@@ -87,7 +89,6 @@ class Color(Enum):
     ORANGE = 202
     PURPLE = 5
     RED = 1
-    RAINBOW = 255 # don't know how to do...
     VIOLET = 165
     YELLOW = 11
     RESET = 255

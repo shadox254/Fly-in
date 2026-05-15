@@ -13,16 +13,17 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/05/15 10:51:10 by rruiz                                      #
+#  Updated: 2026/05/15 11:16:52 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
 from src.models.manager import FlyinManager
 
+
 class Parser():
     '''Responsible for loading, validating, and parsing the map file.
 
-    This class acts as a factory that initializes and populates a 
+    This class acts as a factory that initializes and populates a
     FlyinManager instance based on the provided map file's content.
 
     Attributes:
@@ -69,7 +70,7 @@ class Parser():
                                f'"{file}"')
 
     def _read_lines(self) -> FlyinManager:
-        """Iterate through the map file and populate the manager.
+        '''Iterate through the map file and populate the manager.
 
         This method handles the logical sequence of the map file:
         1. Ignore comments and empty lines.
@@ -81,9 +82,9 @@ class Parser():
             FlyinManager: The fully initialized manager ready for simulation.
 
         Raises:
-            MapInfosError: If the file structure is invalid, the manager is 
+            MapInfosError: If the file structure is invalid, the manager is
                 uninitialized, or mandatory hubs (start/end) are missing.
-        """
+        '''
         try:
             with open(self.map, 'r') as f:
                 for line in f:

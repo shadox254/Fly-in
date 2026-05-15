@@ -13,10 +13,11 @@
 #  File: drone.py                                                             #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/13 08:58:51 by rruiz                                      #
-#  Updated: 2026/05/15 10:07:11 by rruiz                                      #
+#  Updated: 2026/05/15 11:19:07 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
+
 
 class Drone():
     '''Representation of a drone.
@@ -25,7 +26,8 @@ class Drone():
         name (str): Unique identifier formatted as 'D' followed by the ID.
         current_zone (Hub): The hub where the drone is currently located.
         path (list[Hub]): Ordered sequence of hubs to visit.
-        has_finish (bool): Status indicating if the drone has reached its destination.
+        has_finish (bool): Status indicating if the drone has reached its
+            destination.
     '''
     def __init__(self, id: int, start_zone: Hub):
         '''Initialize a new Drone instance.

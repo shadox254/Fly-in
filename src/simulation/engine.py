@@ -13,7 +13,7 @@
 #  File: engine.py                                                            #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:57 by rruiz                                      #
-#  Updated: 2026/05/14 16:53:03 by rruiz                                      #
+#  Updated: 2026/05/15 11:17:30 by rruiz                                      #
 # *************************************************************************** #
 
 from xtermcolor import colorize
@@ -21,13 +21,23 @@ from src.models.calendar import ReservationCalendar
 from src.algo.pathfinding import calculate_drone_path
 from src.models.enum import Color
 
+
 class Engine:
+    '''Main engine responsible for calculating drone paths and running
+    the simulation.
+    '''
     def __init__(self, manager):
+        '''Initializes the engine with the main manager, a blank calendar,
+        and a paths registry.
+        '''
         self.manager = manager
         self.calendar = ReservationCalendar()
         self.paths = {}
 
     def calculate_all_paths(self):
+        '''Sequentially calculates paths for all registered drones and reserves
+        their passage (hubs and connections) in the calendar.
+        '''
         for drone in self.manager.drone_list:
             path = calculate_drone_path(
                 self.manager.start_hub_name,
@@ -50,10 +60,15 @@ class Engine:
                             self.calendar.reserve_connection(prev_hub, hub, t)
 
     def _get_original_connection_name(self, hub1, hub2):
+        '''Retrieves the original name of a connection between two given hubs.
+        '''
         search_key = f"{hub1}-{hub2}"
         return self.manager.connection_names.get(search_key, search_key)
 
     def _get_drone_state(self, path, turn):
+        '''Evaluates the exact position of a drone (on a hub or in transit on a
+        connection) at a specific turn.
+        '''
         if not path:
             return None
 
@@ -75,6 +90,10 @@ class Engine:
         return None
 
     def simulate(self):
+        '''Runs the turn-by-turn simulation loop, identifies drone state
+        changes, and prints their movements formatted with their
+        respective colors.
+        '''
         max_turn = 0
         for path in self.paths.values():
             if path:
@@ -93,7 +112,8 @@ class Engine:
 
                 if current_state and current_state != prev_state:
                     if isinstance(current_state, tuple):
-                        conn_name = self._get_original_connection_name(current_state[0], current_state[1])
+                        conn_name = (self._get_original_connection_name(
+                            current_state[0], current_state[1]))
                         parts = conn_name.split('-')
                         colored_parts = []
 
@@ -103,7 +123,8 @@ class Engine:
                                 color_code = Color[hub_color_str.upper()].value
                             except KeyError:
                                 color_code = Color.LIGHTGRAY.value
-                            colored_parts.append(colorize(part, ansi=color_code))
+                            colored_parts.append(colorize(part,
+                                                          ansi=color_code))
 
                         colored_conn = "-".join(colored_parts)
                         turn_output.append(f"{drone.name}-{colored_conn}")
@@ -113,8 +134,9 @@ class Engine:
                             color_code = Color[hub_color_str.upper()].value
                         except KeyError:
                             color_code = Color.LIGHTGRAY.value
-                        
-                        colored_hub = colorize(str(current_state), ansi=color_code)
+
+                        colored_hub = colorize(str(current_state),
+                                               ansi=color_code)
                         turn_output.append(f"{drone.name}-{colored_hub}")
 
             if turn_output:
