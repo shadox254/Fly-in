@@ -13,7 +13,7 @@
 #  File: __main__.py                                                          #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 09:37:06 by rruiz                                      #
-#  Updated: 2026/05/14 15:00:32 by rruiz                                      #
+#  Updated: 2026/05/15 08:53:21 by rruiz                                      #
 # *************************************************************************** #
 
 from sys import argv as av
@@ -47,7 +47,7 @@ def main():
         file = tb.tb_frame.f_code.co_filename
         function = tb.tb_frame.f_code.co_name
         line = tb.tb_lineno
-        
+
         print(f'Unexpected error, "{e}"\nin: {file}\nfunction: {function},'
               f' line: {line}')
 

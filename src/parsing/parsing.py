@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/05/13 09:50:14 by rruiz                                      #
+#  Updated: 2026/05/15 08:53:02 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
@@ -67,7 +67,7 @@ class Parser():
             raise MapInfosError('Error, empty map')
         if self.manager.has_start != 1 or self.manager.has_end != 1:
             raise MapInfosError('Error, invalid number of start_hub or '
-                                f'end_hub')
+                                'end_hub')
 
         self.manager.create_drones()
         return self.manager

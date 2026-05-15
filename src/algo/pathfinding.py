@@ -13,7 +13,7 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/14 14:59:11 by rruiz                                      #
+#  Updated: 2026/05/15 08:48:16 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
