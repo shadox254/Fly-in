@@ -13,12 +13,13 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/15 15:12:30 by rruiz                                      #
+#  Updated: 2026/05/15 17:13:53 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
 from src.models.calendar import ReservationCalendar
 from src.models.hub import Hub
+from src.models.errors import MapFileError
 
 
 def calculate_drone_path(
@@ -59,6 +60,10 @@ def calculate_drone_path(
     while queue:
         cost, current_turn, current_hub, path = heapq.heappop(queue)
         state = (current_turn, current_hub)
+
+        if current_turn > 1000:
+            raise MapFileError('Error, no path was found on this map '
+                               '(>1000 turn)')
 
         if state in visited:
             continue

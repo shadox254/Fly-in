@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/05/15 16:15:28 by rruiz                                      #
+#  Updated: 2026/05/15 17:37:58 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
@@ -85,29 +85,33 @@ class Parser():
             MapInfosError: If the file structure is invalid, the manager is
                 uninitialized, or mandatory hubs (start/end) are missing.
         '''
-        try:
-            with open(self.map, 'r') as f:
-                for line in f:
-                    line = line.split("#")[0].strip()
-                    if not line:
-                        continue
-                    if line.startswith('nb_drones'):
+        with open(self.map, 'r') as f:
+            for line in f:
+                line = line.split("#")[0].strip()
+                if not line:
+                    continue
+
+                if line.startswith('nb_drones'):
+                    try:
                         self.manager = FlyinManager(int(line.split(":")[1]))
-                    elif line.startswith(('start_hub', 'hub', 'end_hub')):
-                        if self.manager is None:
-                            raise MapInfosError('Error, manager not '
-                                                'initialized')
-                        self.manager.add_hub(line)
-                    elif line.startswith('connection'):
-                        if self.manager is None:
-                            raise MapInfosError('Error, manager not '
-                                                'initialized')
-                        self.manager.add_connection(line)
-                    else:
-                        raise MapInfosError(f'Error, map line invalid: '
-                                            f'"{line}"')
-        except ValueError:
-            raise MapInfosError('Error, invalid nb_drones')
+                    except (ValueError, IndexError):
+                        raise MapInfosError('Error, invalid nb_drones')
+
+                elif line.startswith(('start_hub', 'hub', 'end_hub')):
+                    if self.manager is None:
+                        raise MapInfosError('Error, manager not '
+                                            'initialized')
+                    self.manager.add_hub(line)
+
+                elif line.startswith('connection'):
+                    if self.manager is None:
+                        raise MapInfosError('Error, manager not '
+                                            'initialized')
+                    self.manager.add_connection(line)
+
+                else:
+                    raise MapInfosError(f'Error, map line invalid: '
+                                        f'"{line}"')
         if self.manager is None:
             raise MapInfosError('Error, empty map')
         if self.manager.has_start != 1 or self.manager.has_end != 1:
