@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/15 16:28:47 by rruiz                                      #
+#  Updated: 2026/05/15 17:42:24 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -197,6 +197,9 @@ class FlyinManager():
             for tag in metadata.split():
                 if 'max_link_capacity=' in tag:
                     capacity = int(tag.split('=')[1])
+                    if capacity <= 0:
+                        raise ValueError('Error, max_link_capacity must be '
+                                         'greater than 0')
                 else:
                     raise TypeError('Error, invalid metadata "'
                                     f'{tag}"')
