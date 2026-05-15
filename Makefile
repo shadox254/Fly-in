@@ -13,10 +13,10 @@
 #  File: Makefile                                                             #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/02 17:49:51 by rruiz                                      #
-#  Updated: 2026/04/04 09:39:50 by rruiz                                      #
+#  Updated: 2026/05/15 17:04:37 by rruiz                                      #
 # *************************************************************************** #
 
-MYPY_FLAGS	= --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs --follow-imports=skip
+MYPY_FLAGS	=  --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 SRC			= src
 UV_INSTALL	= curl -LsSf https://astral.sh/uv/install.sh | sh
 UV_VERSION	= uv --version
