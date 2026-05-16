@@ -13,7 +13,7 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/16 09:18:51 by rruiz                                      #
+#  Updated: 2026/05/16 10:55:59 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
@@ -52,7 +52,7 @@ def calculate_drone_path(
         list[tuple[int, str]] | None: A list of (turn, hub_name) representing
             the scheduled path if successful, or None if no path is available.
     '''
-    queue: list[tuple[int, int, str, list[tuple[int, str]]]] = []
+    queue: list[tuple[int, int, int, str, list[tuple[int, str]]]] = []
     heapq.heappush(queue, (0, 0, start_turn, start_hub_name,
                            [(start_turn, start_hub_name)]))
     visited = set()
