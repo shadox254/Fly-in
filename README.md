@@ -1,4 +1,4 @@
-*his project has been created as part of the 42 curriculum by rruiz*
+*This project has been created as part of the 42 curriculum by rruiz*
 
 ## 📄 Description
 
