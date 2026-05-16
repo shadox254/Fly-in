@@ -13,14 +13,14 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/16 12:11:09 by rruiz                                      #
+#  Updated: 2026/05/16 12:43:58 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
 from src.models.drone import Drone
 from src.models.enum import ZoneType
 from src.models.errors import StartHubError, EndHubError, ConnectionError
-from src.models.errors import MapFileError
+from src.models.errors import MapFileError, MapInfosError
 
 
 class FlyinManager():
@@ -110,11 +110,11 @@ class FlyinManager():
             raise MapFileError('Error, missing name of hub')
         try:
             x = int(infos[2])
-        except IndexError:
+        except ValueError:
             raise MapFileError(f'Error, x coordinate of {name} is missing')
         try:
             y = int(infos[3])
-        except IndexError:
+        except ValueError:
             raise MapFileError(f'Error, y coordinate of {name} is missing')
 
         zone = ZoneType.NORMAL.value
@@ -169,7 +169,7 @@ class FlyinManager():
         hub_names = infos.split('-')
 
         if len(hub_names) != 2:
-            return
+            raise MapInfosError(f'Error, invalid connection format: "{infos}"')
 
         hub1_name = hub_names[0].strip()
         hub2_name = hub_names[1].strip()
