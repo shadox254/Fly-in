@@ -13,7 +13,7 @@
 #  File: Makefile                                                             #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/02 17:49:51 by rruiz                                      #
-#  Updated: 2026/05/15 17:04:37 by rruiz                                      #
+#  Updated: 2026/05/16 09:25:40 by rruiz                                      #
 # *************************************************************************** #
 
 MYPY_FLAGS	=  --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
@@ -32,7 +32,7 @@ run:
 	@uv run python -m $(SRC) --file $(MAP)
 
 debug:
-	uv run -m pdb src
+	uv run python -m pdb -m $(SRC) --file $(MAP)
 
 clean:
 	@rm -rf .mypy_cache

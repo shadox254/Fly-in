@@ -13,7 +13,7 @@
 #  File: pathfinding.py                                                       #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/05/13 09:35:23 by rruiz                                      #
-#  Updated: 2026/05/15 17:13:53 by rruiz                                      #
+#  Updated: 2026/05/16 09:18:51 by rruiz                                      #
 # *************************************************************************** #
 
 import heapq
@@ -53,12 +53,12 @@ def calculate_drone_path(
             the scheduled path if successful, or None if no path is available.
     '''
     queue: list[tuple[int, int, str, list[tuple[int, str]]]] = []
-    heapq.heappush(queue, (0, start_turn, start_hub_name,
+    heapq.heappush(queue, (0, 0, start_turn, start_hub_name,
                            [(start_turn, start_hub_name)]))
     visited = set()
 
     while queue:
-        cost, current_turn, current_hub, path = heapq.heappop(queue)
+        cost, prio, current_turn, current_hub, path = heapq.heappop(queue)
         state = (current_turn, current_hub)
 
         if current_turn > 1000:
@@ -75,7 +75,7 @@ def calculate_drone_path(
         max_d = hubs[current_hub].max_drones
         if calendar.is_hub_available(current_hub, current_turn + 1, max_d):
             heapq.heappush(queue,
-                           (cost + 1, current_turn + 1, current_hub,
+                           (cost + 1, prio, current_turn + 1, current_hub,
                             path + [(current_turn + 1, current_hub)]))
 
         if current_hub in connections:
@@ -87,9 +87,15 @@ def calculate_drone_path(
 
                 if n_type == 'restricted':
                     move_cost = 2
+
                 else:
                     move_cost = 1
                 arrival_turn = current_turn + move_cost
+
+                if n_type == 'priority':
+                    new_prio = prio - 1
+                else:
+                    new_prio = prio
 
                 conn_available = True
                 for t in range(current_turn + 1, arrival_turn + 1):
@@ -104,7 +110,8 @@ def calculate_drone_path(
                 n_max_d = hubs[neighbor].max_drones
                 if calendar.is_hub_available(neighbor, arrival_turn, n_max_d):
                     heapq.heappush(queue,
-                                   (cost + move_cost, arrival_turn, neighbor,
+                                   (cost + move_cost, new_prio, arrival_turn,
+                                    neighbor,
                                     path + [(arrival_turn, neighbor)]))
 
     return None
