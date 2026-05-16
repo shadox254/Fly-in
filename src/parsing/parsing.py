@@ -13,7 +13,7 @@
 #  File: parsing.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/03 11:11:38 by rruiz                                      #
-#  Updated: 2026/05/15 17:37:58 by rruiz                                      #
+#  Updated: 2026/05/16 11:58:33 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.errors import MapFileError, MapInfosError
@@ -93,7 +93,11 @@ class Parser():
 
                 if line.startswith('nb_drones'):
                     try:
-                        self.manager = FlyinManager(int(line.split(":")[1]))
+                        drone_nbr = int(line.split(":")[1])
+                        if drone_nbr <= 0:
+                            raise MapInfosError('Error, nb_drones must be a '
+                                                'positive integer')
+                        self.manager = FlyinManager(drone_nbr)
                     except (ValueError, IndexError):
                         raise MapInfosError('Error, invalid nb_drones')
 

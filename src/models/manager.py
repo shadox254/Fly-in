@@ -13,7 +13,7 @@
 #  File: manager.py                                                           #
 #  By: rruiz <rruiz@student.42.fr>                                            #
 #  Created: 2026/04/04 10:38:36 by rruiz                                      #
-#  Updated: 2026/05/15 17:42:24 by rruiz                                      #
+#  Updated: 2026/05/16 12:11:09 by rruiz                                      #
 # *************************************************************************** #
 
 from src.models.hub import Hub
@@ -143,16 +143,15 @@ class FlyinManager():
                                                  'greater than 0')
                             max_drones = val
 
-                        elif hub_type in ('start_hub:', 'end_hub:'):
-                            if val < self.drone_nbr:
-                                raise ValueError("Error, start or end hub "
-                                                 "doesn't have enough space "
-                                                 "for all the drones ")
-                            max_drones = val
-
                     case _:
                         raise TypeError('Error, invalid metadata "'
                                         f'{curr_value[0]}"')
+
+        if name in self.hubs:
+            raise MapFileError(f'Error, duplicate hub name: "{name}"')
+
+        if hub_type == 'start_hub:' and max_drones < self.drone_nbr:
+            max_drones = self.drone_nbr
 
         self.hubs[name] = Hub(name, x, y, {}, zone, color, max_drones)
 
